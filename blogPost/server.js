@@ -17,7 +17,15 @@ app.get("/auth/login", (req, res) => {
 app.post("/auth/login", async (req, res) => {
   const { email, password } = req.body;
   try {
+    // find the user
     const user = await User.findOne({ email });
+    const isMatch = await User.findOne({ password });
+    // check in db
+    if (user && isMatch) {
+      res.send("Logged in");
+    } else {
+      res.send("Invalid credentials");
+    }
   } catch (error) {
     console.log(error);
   }
