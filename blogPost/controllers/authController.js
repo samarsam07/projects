@@ -4,7 +4,11 @@ const passport = require("passport");
 
 // login in render
 exports.getLogin = (req, res) => {
-  res.render("login");
+  res.render("login",{
+    title: "Login",
+    error: "",
+    user: req.user
+  });
 };
 
 // login logic
@@ -16,7 +20,7 @@ exports.login = async (req, res, next) => {
     if (!user) {
       return res.render("login", {
         title: "Login",
-        user: req.username,
+        user: req.user,
         error: info.message,
       });
     }
@@ -30,7 +34,11 @@ exports.login = async (req, res, next) => {
 };
 // register render
 exports.getRegister = (req, res) => {
-  res.render("register");
+  res.render("register",{
+    title: "Register",
+    error: "",
+    user: req.user
+  });
 };
 // register logic
 exports.register = async (req, res) => {
@@ -40,7 +48,7 @@ exports.register = async (req, res) => {
     if (existingUser) {
       res.render("register", {
         title: "Register",
-        user: req.username,
+        user: req.user,
         error: "Email already exists",
       });
     }
@@ -55,8 +63,16 @@ exports.register = async (req, res) => {
   } catch (err) {
     res.render("register", {
       title: "Register",
-      user: req.username,
+      user: req.user,
       error: err.message,
     });
   }
+};
+exports.logout = (req, res) => {
+  req.logout((err)=>{
+    if(err){
+      console.log(err);
+    }
+    res.redirect("/auth/login");
+  });
 };

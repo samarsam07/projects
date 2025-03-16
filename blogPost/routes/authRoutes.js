@@ -7,6 +7,7 @@ const {
   login,
   getRegister,
   register,
+  logout,
 } = require("../controllers/authController");
 
 userRoutes.get("/login", getLogin);
@@ -16,5 +17,7 @@ userRoutes.post("/login", login);
 userRoutes.get("/register", getRegister);
 // user register logic
 userRoutes.post("/register", register);
+// logout
+userRoutes.get("/logout",logout);
 
 module.exports = userRoutes;
