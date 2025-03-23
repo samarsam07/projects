@@ -8,7 +8,7 @@ const userRoutes = require("./routes/authRoutes");
 const session = require("express-session");
 const postRoutes = require("./routes/postRoutes");
 const passport = require("passport");
-const errorHandler = require("./middleware/errorhandler");
+const errorHandler = require("./middleware/errorHandler");
 const passportConfig = require("./config/passport");
 const port = process.env.PORT || 3000;
 

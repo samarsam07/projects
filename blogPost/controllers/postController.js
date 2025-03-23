@@ -1,15 +1,17 @@
+const asyncHandler = require("express-async-handler");
 const Post = require("../models/Post");
 const File = require("../models/File");
 
-exports.getPostForm = (req, res) => {
+exports.getPostForm = asyncHandler((req, res) => {
   res.render("newPost", {
     title: "Post Form",
     error: "",
-    success:"",
+    success: "",
     user: req.user,
   });
-};
-exports.createPost = async (req, res) => {
+});
+
+exports.createPost = asyncHandler(async (req, res) => {
   const { title, content } = req.body;
   // validate the form
   if (!req.files || req.files.length === 0) {
@@ -43,10 +45,10 @@ exports.createPost = async (req, res) => {
     images,
   });
   await newPost.save();
-  res.render("newPost",{
+  res.render("newPost", {
     title: "Post Form",
     user: req.user,
-    error:"",
-    success:"Post created successfully"
-  })
-};
+    error: "",
+    success: "Post created successfully",
+  });
+});
