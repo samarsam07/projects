@@ -8,8 +8,10 @@ const userRoutes = require("./routes/authRoutes");
 const session = require("express-session");
 const postRoutes = require("./routes/postRoutes");
 const passport = require("passport");
+const errorHandler = require("./middleware/errorhandler");
 const passportConfig = require("./config/passport");
 const port = process.env.PORT || 3000;
+
 // ejs
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
@@ -27,6 +29,8 @@ app.use(passport.session());
 // routes
 app.use("/auth",userRoutes);
 app.use("/posts",postRoutes);
+
+app.use(errorHandler);
 // home
 app.get("/", (req, res) => {
   res.render("home", {
