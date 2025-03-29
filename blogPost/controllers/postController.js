@@ -66,7 +66,7 @@ exports.getPosts = asyncHandler(async (req, res) => {
 });
 exports.getPostById = asyncHandler(async (req, res) => {
   const post = await Post.findById(req.params.id).populate("author", "name");
-  res.render("posts", {
+  res.render("postDetails", {
     title: "PostDetails",
     post,
     user: req.user,

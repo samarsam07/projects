@@ -1,3 +1,12 @@
 <%- include('partials/header', { title: post.title, user: user }) %>
+<h1><%= post?.title %></h1>
+<p><%= post?.content %></p>
+<% post?.images?.forEach((image)=>{%>
+<div><img src="<%= image.url%>" alt="image" /></div>
 
-<%- include('partials/footer') %>
+<%})%> <% if (user?._id?.toString()==post?.author?._id?.toString()) { %>
+<div>
+  <a href="/post/<%= post?._id%>/delete">Delete</a>
+  <a href="/post/<%= post?._id%>/edit">Edit</a>
+</div>
+<% } %> <%- include('partials/footer') %>
