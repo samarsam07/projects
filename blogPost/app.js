@@ -10,6 +10,7 @@ const postRoutes = require("./routes/postRoutes");
 const passport = require("passport");
 const errorHandler = require("./middleware/errorHandler");
 const passportConfig = require("./config/passport");
+const commentRoutes = require("./routes/commentRoutes");
 const port = process.env.PORT || 3000;
 
 // ejs
@@ -29,7 +30,7 @@ app.use(passport.session());
 // routes
 app.use("/auth",userRoutes);
 app.use("/posts",postRoutes);
-
+app.use("/",commentRoutes);
 app.use(errorHandler);
 // home
 app.get("/", (req, res) => {
