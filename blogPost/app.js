@@ -5,10 +5,11 @@ const mongoose = require("mongoose");
 const User = require("./models/User");
 const MongoStore = require("connect-mongo");
 const methodOverride = require("method-override");
-const userRoutes = require("./routes/authRoutes");
+const authRoutes = require("./routes/authRoutes");
 const session = require("express-session");
 const postRoutes = require("./routes/postRoutes");
 const passport = require("passport");
+const userRoutes = require("./routes/userRoutes");
 const errorHandler = require("./middleware/errorHandler");
 const passportConfig = require("./config/passport");
 const commentRoutes = require("./routes/commentRoutes");
@@ -20,20 +21,26 @@ app.use(express.urlencoded({ extended: true }));
 // method override middleware
 app.use(methodOverride("_method"));
 // session middleware
-app.use(session({
-  secret:"keyboard cat",
-  resave:false,
-  saveUninitialized:false,
-  store:MongoStore.create({mongoUrl:"mongodb+srv://samarmohd251:vvA4o498uB4TmmBb@mernproject.ufzao.mongodb.net/blogPost?retryWrites=true&w=majority&appName=mernProject"}),
-}))
+app.use(
+  session({
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    store: MongoStore.create({
+      mongoUrl:
+        "mongodb+srv://samarmohd251:vvA4o498uB4TmmBb@mernproject.ufzao.mongodb.net/blogPost?retryWrites=true&w=majority&appName=mernProject",
+    }),
+  })
+);
 // passport
 passportConfig(passport);
 app.use(passport.initialize());
 app.use(passport.session());
 // routes
-app.use("/auth",userRoutes);
-app.use("/posts",postRoutes);
-app.use("/",commentRoutes);
+app.use("/auth", authRoutes);
+app.use("/posts", postRoutes);
+app.use("/user", userRoutes);
+app.use("/", commentRoutes);
 app.use(errorHandler);
 // home
 app.get("/", (req, res) => {
@@ -44,13 +51,11 @@ app.get("/", (req, res) => {
   });
 });
 
-
-
-
 // connect to mongodb
-const uri="mongodb+srv://samarmohd251:vvA4o498uB4TmmBb@mernproject.ufzao.mongodb.net/blogPost?retryWrites=true&w=majority&appName=mernProject";
+const uri =
+  "mongodb+srv://samarmohd251:vvA4o498uB4TmmBb@mernproject.ufzao.mongodb.net/blogPost?retryWrites=true&w=majority&appName=mernProject";
 mongoose
-  .connect(uri,{
+  .connect(uri, {
     // useNewUrlParser: true,
     // useUnifiedTopology: true,
   })

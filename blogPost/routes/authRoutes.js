@@ -1,5 +1,5 @@
 const express = require("express");
-const userRoutes = express.Router();
+const authRoutes = express.Router();
 const mongoose = require("mongoose");
 const User = require("../models/User");
 const {
@@ -10,14 +10,14 @@ const {
   logout,
 } = require("../controllers/authController");
 
-userRoutes.get("/login", getLogin);
+authRoutes.get("/login", getLogin);
 // user login logic
-userRoutes.post("/login", login);
+authRoutes.post("/login", login);
 // register
-userRoutes.get("/register", getRegister);
+authRoutes.get("/register", getRegister);
 // user register logic
-userRoutes.post("/register", register);
+authRoutes.post("/register", register);
 // logout
-userRoutes.get("/logout",logout);
+authRoutes.get("/logout",logout);
 
-module.exports = userRoutes;
+module.exports = authRoutes;

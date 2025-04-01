@@ -41,3 +41,78 @@ exports.addComment = asynchandler(async (req, res) => {
   //redirect
   res.redirect(`/posts/${postId}`);
 });
+// edit comment
+exports.getCommentForm = asynchandler(async (req, res) => {
+  const comment = await Comment.findById(req.params.id);
+  if (!comment) {
+    return res.render("postDetails", {
+      title: "Post",
+      comment,
+      user: req.user,
+      error: "Post not found",
+      success: "",
+    });
+  }
+  res.render("editComment", {
+    title: "Edit Comment",
+    comment,
+    user: req.user,
+    error: "",
+    success: "",
+  });
+});
+
+exports.updateComment = asynchandler(async (req, res) => {
+  const { content } = req.body;
+  const comment = await Comment.findById(req.params.id);
+  if (!comment) {
+    return res.render("postDetails", {
+      title: "Post",
+      comment,
+      user: req.user,
+      error: "Post not found",
+      success: "",
+    });
+  }
+  if (comment.author.toString() !== req.user._id.toString()) {
+    {
+      return res.render("postDetails", {
+        title: "Post",
+        comment,
+        user: req.user,
+        error: "You are not authorized to edit this comment",
+        success: "",
+      });
+    }
+  }
+  comment.content = content || comment.content;
+  await comment.save();
+  res.redirect(`/posts/${comment.post}`);
+});
+// delete comment
+exports.deleteComment = asynchandler(async (req, res) => {
+  const comment = await Comment.findById(req.params.id);
+  if (!comment) {
+    return res.render("postDetails", {
+      title: "Post",
+      comment,
+      user: req.user,
+      error: "Post not found",
+      success: "",
+    });
+  }
+  if (comment.author.toString() !== req.user._id.toString()) {
+    {
+      return res.render("postDetails", {
+        title: "Post",
+        comment,
+        user: req.user,
+        error: "You are not authorized to delete this comment",
+        success: "",
+      });
+    }
+  }
+  await Comment.findByIdAndDelete(req.params.id);
+
+  res.redirect(`/posts/${comment.post}`);
+})
