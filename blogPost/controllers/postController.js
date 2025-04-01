@@ -159,3 +159,32 @@ exports.updatePost = asyncHandler(async (req, res) => {
   await post.save();
   res.redirect(`/posts/${post._id}`);
 });
+// delete post
+exports.deletePost = asyncHandler(async (req,res) => {
+  const post = await Post.findById(req.params.id);
+  if (!post) {
+    return res.render("postDetails", {
+      title: "Post",
+      post,
+      user: req.user,
+      error: "Post not found",
+      success: "",
+    });
+  }
+  if (post.author.toString() !== req.user._id.toString()) {
+    return res.render("postDetails", {
+      title: "Post",
+      post,
+      user: req.user,
+      error: "You are not authorized to delete this post",
+      success: "",
+    });
+  }
+  await Promise.all(
+    post.images.map(async(image)=>{
+      await cloudinary.uploader.destroy(image.public_id);
+    })
+  );
+  await Post.findByIdAndDelete(req.params.id);
+  res.redirect("/posts");
+});
