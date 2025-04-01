@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 const User = require("./models/User");
 const MongoStore = require("connect-mongo");
+const methodOverride = require("method-override");
 const userRoutes = require("./routes/authRoutes");
 const session = require("express-session");
 const postRoutes = require("./routes/postRoutes");
@@ -16,6 +17,8 @@ const port = process.env.PORT || 3000;
 // ejs
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+// method override middleware
+app.use(methodOverride("_method"));
 // session middleware
 app.use(session({
   secret:"keyboard cat",
